@@ -1,13 +1,18 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PostViewSet
+from . import views  # Importamos tus vistas desde views.py
 
-# Creamos el Router
+# 1. Configuración del Router para la API
 router = DefaultRouter()
-# Le decimos: "Maneja la ruta 'posts' usando el PostViewSet"
-router.register(r'posts', PostViewSet)
+router.register(r'api/posts', views.PostViewSet, basename='post')
 
+# 2. Definición de URLs
 urlpatterns = [
-    # Incluimos todas las rutas que el router generó automáticamente
-    path('', include(router.urls)),
+    # --- Vistas Normales (HTML) ---
+    path('', views.feed, name='feed'),           # La portada (feed)
+    path('login/', views.login_view, name='login'), # El login
+
+    # --- API (JSON) ---
+    # El router genera URLs como: /api/posts/, /api/posts/1/, etc.
+    path('', include(router.urls)), 
 ]
